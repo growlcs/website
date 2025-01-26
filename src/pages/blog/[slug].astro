@@ -1,0 +1,34 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { type CollectionEntry, getCollection } from 'astro:content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title}>
+	<a href="/" class="block text-sm hover:text-neutral-500">← Homepage</a>
+  <div class="mt-12 flex flex-col">
+    <span class="mt-4 text-sm">
+      {post.data.date.toLocaleDateString()}
+    </span>
+    <h1 class="text-3xl font-bold">
+      {post.data.title}
+    </h1>
+  </div>
+	<div class="mt-12">
+		<Content />
+	</div>
+</Layout>
+

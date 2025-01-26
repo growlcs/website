@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content"
+import { BLOG_PATH } from "../consts.ts"
+
+const posts = await getCollection("blog")
+
+const { format: formatDate } = new Intl.DateTimeFormat("en-US", {
+	dateStyle: "long"
+});
+---
+
+<Layout title="Growl">
+  <div class="my-8 flex justify-between">
+    <div class="flex items-center gap-4">
+      <img src="/pfp.png" class="size-8 rounded-full ring-black ring-2" />
+      <h1 class="text-xl font-bold">Growl</h1>
+    </div>
+    <div class="flex gap-4 items-center">
+      <a href="https://x.com/growlcs" class="underline">Twitter</a>
+      <a href="https://github.com/growlcs" class="underline">Github</a>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4">
+    <p>Hi, I'm a software engineer at [redacted], university student and hobbyist.</p>
+    <p>
+      I'm currently building stuff for the web, learning low-level programming and exploring how systems and computers work under the hood.
+      I also like building silly, unorthodox things.
+    </p>
+  </div>
+  <section class="mt-12">
+		<h2 class="text-xl font-bold">Writing</h2>
+		<div class="mt-4 flex flex-col gap-y-4">
+			{posts.map((post) => (
+        <a
+          href={`${BLOG_PATH}/${post.id}`}
+          class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 sm:truncate hover:text-neutral-500"
+        >
+          <p class="sm:truncate">
+            {post.data.title}
+          </p>
+          <div
+            class="hidden sm:block flex-1 overflow-hidden"
+          >
+            {''.padEnd(1000, '.')}
+          </div>
+          <p class="shrink-0 text-sm">
+            {formatDate(post.data.date)}
+          </p>
+        </a>
+      ))}
+    </div>
+	</section>
+</Layout>
