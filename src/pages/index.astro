@@ -1,13 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content"
+import { formatDate } from "../utils/formatDate.ts"
 import { BLOG_PATH } from "../consts.ts"
 
 const posts = await getCollection("blog")
-
-const { format: formatDate } = new Intl.DateTimeFormat("en-US", {
-	dateStyle: "long"
-});
 ---
 
 <Layout title="Growl">

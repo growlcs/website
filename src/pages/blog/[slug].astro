@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { render } from 'astro:content';
+import { formatDate } from "../../utils/formatDate.ts"
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -18,17 +19,22 @@ const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title}>
-	<a href="/" class="block text-sm hover:text-neutral-500">← Homepage</a>
+	<a href="/" class="block text-sm text-neutral-500">← Back to homepage</a>
   <div class="mt-12 flex flex-col">
     <span class="mt-4 text-sm">
-      {post.data.date.toLocaleDateString()}
+      {formatDate(post.data.date)}
     </span>
     <h1 class="text-3xl font-bold">
       {post.data.title}
     </h1>
   </div>
-	<div class="mt-12">
+	<div id="content" class="mt-12">
 		<Content />
 	</div>
 </Layout>
 
+<style>
+  :global(#content p:not(:first-child):not(:last-child)) {
+    @apply mt-6;
+  }
+</style>
